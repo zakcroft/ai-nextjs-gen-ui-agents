@@ -1,16 +1,25 @@
 import { openai } from "@ai-sdk/openai";
-import { StreamingTextResponse, streamText, StreamData, tool } from "ai";
+import { tool, generateText, CoreMessage } from "ai";
 import { z } from "zod";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { messages }: { messages: CoreMessage[] } = await req.json();
 
-  const result = await streamText({
-    model: openai("gpt-4-turbo"),
+  console.log(messages);
 
+  const {
+    text,
+    toolResults,
+    toolCalls,
+    finishReason,
+    responseMessages,
+    usage,
+  } = await generateText({
+    model: openai("gpt-3.5-turbo"),
+    system: "You are a friendly assistant!",
     messages,
     tools: {
       weather: tool({
@@ -30,17 +39,20 @@ export async function POST(req: Request) {
     },
   });
 
-  // const data = new StreamData();
-  //
-  // data.append({ extra: "data" });
-  //
-  // const stream = result.toAIStream({
-  //   onFinal(_) {
-  //     data.close();
-  //   },
+  console.log(text);
+  return Response.json({ messages: responseMessages });
+  // return Response.json({
+  //   messages: [
+  //     ...messages,
+  //     {
+  //       role: "ai",
+  //       content: text,
+  //     },
+  //   ],
+  //   toolResults,
+  //   toolCalls,
+  //   finishReason,
+  //   responseMessages,
+  //   usage,
   // });
-
-  // return new StreamingTextResponse(stream, {}, data);
-
-  return result.toAIStreamResponse();
 }
