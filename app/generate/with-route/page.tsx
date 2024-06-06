@@ -7,6 +7,8 @@ export default function Page() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<CoreMessage[]>([]);
 
+  console.log("messages", messages);
+
   return (
     <div className={"flex justify-center "}>
       <div className={"flex flex-col w-2/3 "}>
@@ -17,6 +19,7 @@ export default function Page() {
               : message.content
                   .filter((part) => part.type === "text")
                   .map((part, partIndex) => (
+                    // @ts-ignore
                     <div key={partIndex}>{part.text}</div>
                   ))}
           </div>
@@ -43,12 +46,31 @@ export default function Page() {
               }),
             });
 
-            const { messages: newMessages } = await response.json();
+            const { messages: newMessages, toolResults } =
+              await response.json();
 
-            setMessages((currentMessages) => [
-              ...currentMessages,
-              ...newMessages,
-            ]);
+            const [toolResult = {}] = toolResults || [];
+            const { result } = toolResult || [];
+
+            console.log("toolResults", toolResults);
+            console.log("result", toolResult);
+
+            if (result?.location && result?.temperature) {
+              console.log(result?.location && result?.temperature);
+
+              setMessages((currentMessages) => [
+                ...currentMessages,
+                {
+                  role: "assistant",
+                  content: `${result.location} is ${result.temperature} Celsius`,
+                },
+              ]);
+            } else {
+              setMessages((currentMessages) => [
+                ...currentMessages,
+                ...newMessages,
+              ]);
+            }
           }
         }}
       />

@@ -3,7 +3,12 @@
 import { useChat } from "ai/react";
 import Link from "next/link";
 
-const links = ["/generate/with-action", "/generate/with-route"];
+const links = [
+  "/generate/with-route",
+  "/generate/with-action",
+  "/stream/with-route",
+  "/stream/with-action",
+];
 
 export default function Chat() {
   return (

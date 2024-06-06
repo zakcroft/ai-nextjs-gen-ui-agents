@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   });
 
   console.log(text);
-  return Response.json({ messages: responseMessages });
+  return Response.json({ messages: responseMessages, toolResults });
   // return Response.json({
   //   messages: [
   //     ...messages,
