@@ -1,6 +1,7 @@
 import { openai } from "@ai-sdk/openai";
-import { StreamingTextResponse, streamText, StreamData, tool } from "ai";
-import { z } from "zod";
+import { generateText, streamText } from "ai";
+import { weatherTool } from "@/app/tools/weatherTool";
+import { createStreamableValue } from "ai/rsc";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
@@ -8,37 +9,27 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const result = await streamText({
-    model: openai("gpt-4-turbo"),
+  console.log("messages===", messages);
 
+  const result = await streamText({
+    model: openai("gpt-3.5-turbo"),
     messages,
     tools: {
-      weather: tool({
-        description: "Get the weather in a location",
-        parameters: z.object({
-          location: z.string().describe("The location to get the weather for"),
-        }),
-        execute: async ({ location }) => {
-          console.log("location", location);
-          console.log("MATH", 72 + Math.floor(Math.random() * 21) - 10);
-          return {
-            location,
-            temperature: 72 + Math.floor(Math.random() * 21) - 10,
-          };
-        },
-      }),
+      weatherTool,
     },
   });
 
-  // const data = new StreamData();
-  //
-  // data.append({ extra: "data" });
-  //
-  // const stream = result.toAIStream({
-  //   onFinal(_) {
-  //     data.close();
-  //   },
-  // });
+  console.log(result);
+
+  // if (result.toolResults.length && result.toolCalls.length) {
+  //   const { toolResults, toolCalls } = await result;
+  //   console.log("if (toolResults && toolCalls) {", toolResults && toolCalls);
+  //   const resultStram = await streamText({
+  //     model: openai("gpt-3.5-turbo"),
+  //     prompt: `Tell me a joke that incorporates ${toolResults[0].result.location} and it's current temperature (${toolResults[0].result.temperature})`,
+  //   });
+  //   return createStreamableValue(resultStram.textStream).value;
+  // }
 
   // return new StreamingTextResponse(stream, {}, data);
 

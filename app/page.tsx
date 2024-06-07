@@ -8,6 +8,7 @@ const links = [
   "/generate/with-action",
   "/stream/with-route",
   "/stream/with-action",
+  "/with-route-client-tools",
 ];
 
 export default function Chat() {
