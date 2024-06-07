@@ -1,41 +1,59 @@
 "use client";
 
+import { useState } from "react";
+import { ClientMessage } from "./actions";
 import { useActions, useUIState } from "ai/rsc";
+import { nanoid } from "nanoid";
 
-import { AI } from "@/app/AI-UI-states/with-action/actions";
+// Force the page to be dynamic and allow streaming responses up to 30 seconds
+export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
-export default function Page() {
-  const { sendMessage } = useActions<typeof AI>();
-  const [messages, setMessages] = useUIState();
+export default function Home() {
+  const [input, setInput] = useState<string>("");
+  const [conversation, setConversation] = useUIState();
+  const { continueConversation } = useActions();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    setMessages([
-      ...messages,
-      { id: Date.now(), role: "user", display: event.target.message.value },
-    ]);
-
-    console.log(event.target.message.value);
-
-    const response = await sendMessage(event.target.message.value);
-    setMessages([
-      ...messages,
-      { id: Date.now(), role: "assistant", display: response },
-    ]);
-  };
+  console.log("conversation useUIState", conversation);
 
   return (
-    <>
-      <ul>
-        {messages.map((message) => (
-          <li key={message.id}>{message.display}</li>
+    <div>
+      <div>
+        {conversation.map((message: ClientMessage) => (
+          <div key={message.id}>
+            {message.role}: {message.display}
+          </div>
         ))}
-      </ul>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="message" />
-        <button type="submit">Send</button>
-      </form>
-    </>
+      </div>
+
+      <div>
+        <input
+          type="text"
+          value={input}
+          onChange={(event) => {
+            setInput(event.target.value);
+          }}
+        />
+        <button
+          onClick={async () => {
+            setConversation((currentConversation: ClientMessage[]) => [
+              ...currentConversation,
+              { id: nanoid(), role: "user", display: input },
+            ]);
+
+            const message = await continueConversation(input);
+
+            console.log("continueConversation message", message);
+
+            setConversation((currentConversation: ClientMessage[]) => [
+              ...currentConversation,
+              message,
+            ]);
+          }}
+        >
+          Send Message
+        </button>
+      </div>
+    </div>
   );
 }
