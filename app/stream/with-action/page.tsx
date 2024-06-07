@@ -38,11 +38,12 @@ export default function Chat() {
           setData(result.data);
           // console.log(result.toolResults);
 
-          for await (const content of readStreamableValue(result.toolResults)) {
-            console.log("content===", content);
-          }
+          // for await (const content of readStreamableValue(result.toolResults)) {
+          //   console.log("content===", content);
+          // }
 
           for await (const content of readStreamableValue(result.message)) {
+            console.log("messagecontent===", content);
             setMessages([
               ...newMessages,
               {

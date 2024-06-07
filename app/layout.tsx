@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import { AI } from "./AI-UI-states/with-action/actions";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,16 +17,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Link
-          href={"/"}
-          className={"text-white w-full flex justify-center py-10 text-xl"}
-        >
-          {"HOME"}
-        </Link>
-        {children}
-      </body>
-    </html>
+    <AI>
+      <html lang="en">
+        <body className={inter.className}>
+          <Link
+            href={"/"}
+            className={"text-white w-full flex justify-center py-10 text-xl"}
+          >
+            {"HOME"}
+          </Link>
+          {children}
+        </body>
+      </html>
+    </AI>
   );
 }

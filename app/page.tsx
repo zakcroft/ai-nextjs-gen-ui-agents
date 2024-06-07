@@ -9,6 +9,7 @@ const links = [
   "/stream/with-route",
   "/stream/with-action",
   "/with-route-client-tools",
+  "/AI-UI-states/with-action",
 ];
 
 export default function Chat() {
