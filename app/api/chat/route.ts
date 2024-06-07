@@ -19,8 +19,6 @@ export async function POST(req: Request) {
     },
   });
 
-  console.log(result);
-
   // if (result.toolResults.length && result.toolCalls.length) {
   //   const { toolResults, toolCalls } = await result;
   //   console.log("if (toolResults && toolCalls) {", toolResults && toolCalls);
