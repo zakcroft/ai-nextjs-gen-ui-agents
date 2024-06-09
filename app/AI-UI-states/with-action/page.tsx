@@ -17,8 +17,11 @@ export default function Home() {
   console.log("conversation useUIState", conversation);
 
   return (
-    <div>
-      <div>
+    <div className={"flex flex-col items-center "}>
+      <h1 className={"mb-6"}>
+        Ask to tell me a joke and include a location like London.
+      </h1>
+      <div className={"w-1/3"}>
         {conversation.map((message: ClientMessage) => (
           <div key={message.id}>
             {message.role}: {message.display}
@@ -26,16 +29,15 @@ export default function Home() {
         ))}
       </div>
 
-      <div>
-        <input
-          type="text"
-          value={input}
-          onChange={(event) => {
-            setInput(event.target.value);
-          }}
-        />
-        <button
-          onClick={async () => {
+      <input
+        className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl text-black"
+        type="text"
+        value={input}
+        onChange={(event) => {
+          setInput(event.target.value);
+        }}
+        onKeyDown={async (event) => {
+          if (event.key === "Enter") {
             setConversation((currentConversation: ClientMessage[]) => [
               ...currentConversation,
               { id: nanoid(), role: "user", display: input },
@@ -49,11 +51,10 @@ export default function Home() {
               ...currentConversation,
               message,
             ]);
-          }}
-        >
-          Send Message
-        </button>
-      </div>
+            setInput("");
+          }
+        }}
+      />
     </div>
   );
 }
