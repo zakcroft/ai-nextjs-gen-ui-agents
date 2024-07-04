@@ -10,7 +10,7 @@ const links = [
   "/stream/with-action",
   "/with-route-client-tools",
   "/AI-UI-states/with-action",
-  "/agent",
+  "/agents/langGraph",
 ];
 
 export default function Chat() {

@@ -12,6 +12,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Stock } from "./Stock";
 import { Langfuse } from "langfuse";
+import { agentOne } from "../../agents/langGraph/agent";
 
 const langfuse = new Langfuse({
   secretKey: process.env.LANGFUSE_SECRET_KEY,
@@ -136,6 +137,7 @@ export async function continueConversation(
 export const AI = createAI<ServerMessage[], ClientMessage[]>({
   actions: {
     continueConversation,
+    agentOne,
   },
   initialAIState: [],
   initialUIState: [],
