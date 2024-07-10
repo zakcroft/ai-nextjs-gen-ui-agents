@@ -1,4 +1,4 @@
-require("esm-hook"); // Only for running this in TSLab. See: https://github.com/yunabe/tslab/issues/72
+// require("esm-hook"); // Only for running this in TSLab. See: https://github.com/yunabe/tslab/issues/72
 import { TavilySearchResults } from "@langchain/community/tools/tavily_search";
 import { DynamicStructuredTool } from "@langchain/core/tools";
 import * as d3 from "d3";

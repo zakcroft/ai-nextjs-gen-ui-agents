@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import { AI } from "./AI-UI-states/with-action/actions";
+import { AI } from "@/app/agents/langGraph/actions";
 
 const inter = Inter({ subsets: ["latin"] });
 
