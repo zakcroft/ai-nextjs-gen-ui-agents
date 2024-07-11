@@ -1,4 +1,4 @@
-import { JsonOutputToolsParser } from "langchain/output_parsers";
+import { JsonOutputToolsParser } from "@langchain/core/output_parsers/openai_tools";
 import { llmChatOpenAI } from "@/app/agents/langGraph/llms/chatGpt";
 import {
   ChatPromptTemplate,
@@ -52,6 +52,8 @@ const formattedPrompt = await prompt.partial({
   options: options.join(", "),
   members: members.join(", "),
 });
+
+console.log(formattedPrompt);
 
 export const supervisorChain = formattedPrompt
   .pipe(

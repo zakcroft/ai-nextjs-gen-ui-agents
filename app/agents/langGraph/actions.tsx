@@ -4,13 +4,14 @@ import { createAI } from "ai/rsc";
 
 import { ReactNode } from "react";
 import { agentApi } from "@/app/agents/langGraph/graph";
+import { ChatMessage } from "@langchain/core/messages";
 
-export interface ServerMessage {
+export interface ServerMessage extends ChatMessage {
   role: "user" | "assistant";
   content: string;
 }
 
-export interface ClientMessage {
+export interface ClientMessage extends ChatMessage {
   id: string;
   role: "user" | "assistant";
   display: ReactNode;

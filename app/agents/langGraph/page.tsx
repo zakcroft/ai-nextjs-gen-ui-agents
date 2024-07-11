@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ClientMessage } from "../../AI-UI-states/with-action/actions";
+import { ClientMessage } from "@/app/agents/langGraph/actions";
 import { useActions, useUIState } from "ai/rsc";
 import { nanoid } from "nanoid";
-import { agentApi } from "@/app/agents/langGraph/graph";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";
@@ -42,6 +41,7 @@ export default function Home() {
               { id: nanoid(), role: "user", display: input },
             ]);
 
+            console.log("input===", input);
             const message = await agentApi(input);
 
             console.log("agentOne message", message);

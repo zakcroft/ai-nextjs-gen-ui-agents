@@ -10,6 +10,7 @@ import { chartGeneratorAgentNode } from "@/app/agents/langGraph/agents/chartAgen
 import { supervisorChain } from "@/app/agents/langGraph/agents/supervisorChain";
 import { MEMBERS } from "@/app/agents/langGraph/agents/constants";
 import { nanoid } from "nanoid";
+import { HumanMessage } from "@langchain/core/messages";
 
 const workflow = new StateGraph<AgentStateChannels, unknown, string>({
   channels: agentStateChannels,
@@ -31,7 +32,13 @@ workflow.addEdge(START, "Supervisor");
 const graph = workflow.compile();
 
 export const agentApi = async (message: string) => {
-  let inputs = { messages: [["user", message]] };
+  let inputs = {
+    messages: [
+      new HumanMessage({
+        content: message,
+      }),
+    ],
+  };
   // [...history.get(), { role: "user", content: input }],
   for await (const { messages } of await graph.stream(inputs, {
     // ...config,
