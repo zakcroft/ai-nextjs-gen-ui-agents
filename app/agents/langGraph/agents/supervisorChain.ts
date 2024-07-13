@@ -6,7 +6,7 @@ import {
 } from "@langchain/core/prompts";
 import { END } from "@langchain/langgraph";
 
-const members = ["researcher", "chart_generator"];
+import { agentsArr } from "@/app/agents/langGraph/agents/constants";
 
 const systemPrompt =
   "You are a supervisor tasked with managing a conversation between the" +
@@ -14,7 +14,7 @@ const systemPrompt =
   " respond with the worker to act next. Each worker will perform a" +
   " task and respond with their results and status. When finished," +
   " respond with FINISH.";
-const options = [END, ...members];
+const options = [END, ...agentsArr];
 
 // Define the routing function
 const functionDef = {
@@ -50,10 +50,10 @@ const prompt = ChatPromptTemplate.fromMessages([
 
 const formattedPrompt = await prompt.partial({
   options: options.join(", "),
-  members: members.join(", "),
+  members: agentsArr.join(", "),
 });
 
-console.log(formattedPrompt);
+// console.log(formattedPrompt);
 
 export const supervisorChain = formattedPrompt
   .pipe(
@@ -64,4 +64,7 @@ export const supervisorChain = formattedPrompt
   .pipe(new JsonOutputToolsParser())
   // select the first one
   // @ts-ignore
-  .pipe((x) => x[0].args);
+  .pipe((x) => {
+    console.log(x[0].args);
+    return x[0].args;
+  });
